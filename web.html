@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic Information Finder</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .search-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-section {
+            margin-top: 50px;
+        }
+
+        .result-section h3 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .loading-spinner {
+            display: none;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-container">
+            <h1 class="text-center mb-4">Get Information on Your Topic</h1>
+            <form action="/" method="POST" id="searchForm">
+                <div class="input-group mb-3">
+                    <input type="text" name="topic" class="form-control" placeholder="Enter topic" required>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+
+            <div class="text-center">
+                <div class="loading-spinner spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display Results -->
+        {% if topic %}
+        <div class="result-section">
+            <h3>Results for "{{ topic }}"</h3>
+            
+            <!-- Blogs Section -->
+            <div class="mb-5">
+                <h3>Blogs</h3>
+                <div class="row">
+                    {% if blogs and blogs.status == 'ok' %}
+                        {% for blog in blogs.items %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ blog.title }}</h5>
+                                        <p class="card-text">Published on {{ blog.pubDate }}</p>
+                                        <a href="{{ https://feedly.com/i/top/reading-blogs }}" target="_blank" class="btn btn-primary">Read More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p>No blogs found.</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Research Papers Section -->
+            <div class="mb-5">
+                <h3>Research Papers</h3>
+                <div class="row">
+                    {% for paper in research_papers %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ paper.title }}</h5>
+                                    <a href="{{https://www.scientifica.uk.com/neurowire/gradhacks-a-guide-to-reading-research-papers}}" target="_blank" class="btn btn-primary">View Paper</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p>No research papers found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- News Section -->
+            <div>
+                <h3>News Articles</h3>
+                <div class="row">
+                    {% if news_articles and news_articles.status == 'ok' %}
+                        {% for article in news_articles.articles %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ article.title }}</h5>
+                                        <p class="card-text">Published on {{ article.publishedAt.split('T')[0] }}</p>
+                                        <a href="{{ https://www.nytimes.com/international/ }}" target="_blank" class="btn btn-primary">Read Article</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p>No news articles found.</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS and optional JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function () {
+            document.querySelector('.loading-spinner').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
